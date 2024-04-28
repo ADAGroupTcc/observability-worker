@@ -7,6 +7,7 @@ import (
 
 // Environments define the environment variables
 type Environments struct {
+	ApiPort         string   `mapstructure:"PORT" envconfig:"PORT"`
 	ApiToken        string   `mapstructure:"API_TOKEN" envconfig:"API_TOKEN"`
 	ApiBaseUrls     []string `mapstructure:"API_BASE_URLS" envconfig:"API_BASE_URLS"`
 	PollingInterval int      `mapstructure:"POLLING_INTERVAL" envconfig:"POLLING_INTERVAL"`
