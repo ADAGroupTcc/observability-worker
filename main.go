@@ -19,20 +19,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("config.LoadEnvVars: %v", err)
 	}
-	http.HandleFunc("/health", HealthHandler)
-	http.HandleFunc("/check", CheckHelthinessHandler)
-	if err := http.ListenAndServe(fmt.Sprintf(":%s", envs.ApiPort), nil); err != nil {
-		log.Fatal(fmt.Sprintf("Failed to listen port %s", envs.ApiPort), err)
-		os.Exit(1)
-	}
-}
-
-func HealthHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"status":"ok"}`))
-}
-
-func CheckHelthinessHandler(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		cl := http.Client{}
 		var wg sync.WaitGroup
@@ -61,6 +47,14 @@ func CheckHelthinessHandler(w http.ResponseWriter, r *http.Request) {
 			time.Sleep(time.Duration(envs.PollingInterval) * time.Second)
 		}
 	}()
+	http.HandleFunc("/health", HealthHandler)
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", envs.ApiPort), nil); err != nil {
+		log.Fatal(fmt.Sprintf("Failed to listen port %s", envs.ApiPort), err)
+		os.Exit(1)
+	}
+}
+
+func HealthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status":"ok"}`))
 }
