@@ -16,8 +16,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("config.LoadEnvVars: %v", err)
 	}
-	cl := http.Client{}
 	go func() {
+		cl := http.Client{}
 		var wg sync.WaitGroup
 		for {
 			log.Default().Printf("Start checking APIs healthiness")
